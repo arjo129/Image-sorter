@@ -1,0 +1,47 @@
+﻿<Page
+    x:Class="ImageSorter.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ImageSorter"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Name="page">
+    <Page.Resources>
+       
+    </Page.Resources>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <CommandBar Height="48" Grid.ColumnSpan="1" Grid.RowSpan="1" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <CommandBar.Content>
+                <Grid>
+                    <TextBlock MinHeight="38" Height="38" Margin="10,10,0,0">Picture Viewer</TextBlock>
+                </Grid>
+            </CommandBar.Content>
+            <AppBarButton Icon="Folder" Label="Select Folder" Click="BrowseBtn_Click"/>
+            <AppBarToggleButton x:Name="ModeBtn" Icon="Video" Label="Video Mode"/>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="Sort By Video Length"></AppBarButton>
+                <AppBarButton Label="Sort By Overexposure"></AppBarButton>
+                <AppBarButton Label="Sort By Blurriness"></AppBarButton>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+
+        <GridView Grid.Row="1" Grid.ColumnSpan="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray" ItemsSource="{x:Bind Images, Mode=OneWay}">
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="local:mImage">
+                    <Image Source="{x:Bind thmb}" Width="120"/>
+                    
+                </DataTemplate>
+            </GridView.ItemTemplate>
+            
+        </GridView>
+    </Grid>
+</Page>
