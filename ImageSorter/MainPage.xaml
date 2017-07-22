@@ -38,7 +38,7 @@
 
         <GridView Grid.Row="1" Grid.ColumnSpan="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray" ItemsSource="{x:Bind Images, Mode=OneWay}">
             <GridView.ItemTemplate>
-                <DataTemplate x:DataType="local:mImage">
+                <DataTemplate x:DataType="local:ImageItem">
                     <Image Source="{x:Bind thmb}" Width="120"></Image>
                 </DataTemplate>
             </GridView.ItemTemplate>
