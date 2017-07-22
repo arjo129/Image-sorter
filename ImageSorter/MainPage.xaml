@@ -8,12 +8,13 @@
     mc:Ignorable="d"
     x:Name="page">
     <Page.Resources>
-       
+
     </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
         <Grid.RowDefinitions>
             <RowDefinition Height="48"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="26"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -25,23 +26,24 @@
                     <TextBlock MinHeight="38" Height="38" Margin="10,10,0,0">Picture Viewer</TextBlock>
                 </Grid>
             </CommandBar.Content>
+            <AppBarButton Icon="Delete" Label="Delete"/>
             <AppBarButton Icon="Folder" Label="Select Folder" Click="BrowseBtn_Click"/>
             <AppBarToggleButton x:Name="ModeBtn" Icon="Video" Label="Video Mode"/>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="Sort By Video Length"></AppBarButton>
-                <AppBarButton Label="Sort By Overexposure"></AppBarButton>
-                <AppBarButton Label="Sort By Blurriness"></AppBarButton>
+                <AppBarButton x:Name="TimeBtn" Label="Sort By Time" Click="TimeBtn_Click"></AppBarButton>
+                <AppBarButton x:Name="ExposureBtn" Label="Sort By Overexposure" Click="ExposureBtn_Click"></AppBarButton>
+                <AppBarButton x:Name="BlurButton" Label="Sort By Blurriness" Click="BlurButton_Click"></AppBarButton>
             </CommandBar.SecondaryCommands>
         </CommandBar>
 
         <GridView Grid.Row="1" Grid.ColumnSpan="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray" ItemsSource="{x:Bind Images, Mode=OneWay}">
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="local:mImage">
-                    <Image Source="{x:Bind thmb}" Width="120"/>
-                    
+                    <Image Source="{x:Bind thmb}" Width="120"></Image>
                 </DataTemplate>
             </GridView.ItemTemplate>
-            
         </GridView>
+
+        <ProgressBar Grid.Row="2" x:Name="PGBar" IsIndeterminate="False"></ProgressBar>
     </Grid>
 </Page>
