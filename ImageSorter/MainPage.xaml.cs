@@ -115,8 +115,7 @@ namespace ImageSorter
         public StorageFile path { get; set; } 
         public BitmapImage thmb { get; set; }
         public float blur { get; set; }
-        public int overexposure { get; set; }
-        public int underexposure { get; set; }
+        public int exposure { get; set; }
         public int sortstate { get; set; }
         public DateTimeOffset timeTaken { get; set; }
         public int CompareTo(object obj)
@@ -127,7 +126,7 @@ namespace ImageSorter
                 case 0:
                     return blur.CompareTo(ob.blur);
                 case 1:
-                    return overexposure.CompareTo(ob.overexposure);
+                    return exposure.CompareTo(ob.exposure);
                 case 2:
                     return timeTaken.CompareTo(ob.timeTaken);
             }
@@ -144,7 +143,7 @@ namespace ImageSorter
             uint height = bd.PixelHeight;
             PixelDataProvider pd = await bd.GetPixelDataAsync();
             picdata = pd.DetachPixelData();
-            overexposure = 0;
+            exposure = 0;
             float mean = 0, M2 = 0;
             int n = 0;
             switch (fmt)
@@ -160,15 +159,7 @@ namespace ImageSorter
                             byte c2 = picdata[(x + width * y) * 4 + 1];
                             byte c3 = picdata[(x + width * y) * 4 + 2];
                             int brightness = c1 + c2 + c3;
-                            if (brightness >= 255 * 3)
-                            {
-                                overexposure++;
-                                underexposure--;
-                            }
-                            if (brightness == 0)
-                            {
-                                underexposure++;
-                            }
+                            exposure += 255 - brightness / 3;
                             byte ct1 = picdata[(x + width * (y - 1)) * 4];
                             byte ct2 = picdata[(x + width * (y - 1)) * 4 + 1];
                             byte ct3 = picdata[(x + width * (y - 1)) * 4 + 2];
@@ -193,6 +184,7 @@ namespace ImageSorter
                         }
                     }
                     blur = M2 / (n - 1);
+                    exposure /= n;
                     break;
                 case BitmapPixelFormat.Rgba16:
                     break;
