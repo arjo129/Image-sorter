@@ -18,6 +18,17 @@ namespace ImageSorter
         public int sortstate { get; set; }
         public DateTimeOffset timeTaken { get; set; }
         public TimeSpan Duration { get; set; }
+        public bool IsVideo { get; set; }
+        public string DurationStr { get {
+                if (IsVideo)
+                {
+                    return Duration.ToString(@"hh\:mm\:ss");
+                }
+                else
+                {
+                    return "";
+                }
+            } }
         public int CompareTo(object obj)
         {
             var ob = (ImageItem)obj;

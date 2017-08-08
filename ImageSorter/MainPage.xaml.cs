@@ -54,33 +54,28 @@ namespace ImageSorter
                 int cnt = files.Count();
                 foreach (StorageFile fp in files)
                 {
-                    if (!(bool)ModeBtn.IsChecked)
+                    ImageItem img = new ImageItem();
+                    if (fp.Path.EndsWith(".jpg") || fp.Path.EndsWith(".jpeg") || fp.Path.EndsWith(".JPG") || fp.Path.EndsWith(".JPEG"))
                     {
-                        Debug.WriteLine(fp.Path);
-                        ImageItem img = new ImageItem();
-                        if (fp.Path.EndsWith(".jpg") || fp.Path.EndsWith(".jpeg") || fp.Path.EndsWith(".JPG") || fp.Path.EndsWith(".JPEG"))
-                        {
-                            img.path = fp;
-                            img.thmb = new BitmapImage();
-                            ImageProperties imageProperties = await fp.Properties.GetImagePropertiesAsync();
-                            img.timeTaken = imageProperties.DateTaken;
-                            img.thmb.SetSource(await fp.GetThumbnailAsync(ThumbnailMode.PicturesView));
-                            img.get_blurriness();
-                            Images.Add(img);
-                        }
-                    } else
+                        img.path = fp;
+                        img.thmb = new BitmapImage();
+                        ImageProperties imageProperties = await fp.Properties.GetImagePropertiesAsync();
+                        img.timeTaken = imageProperties.DateTaken;
+                        img.thmb.SetSource(await fp.GetThumbnailAsync(ThumbnailMode.PicturesView));
+                        img.IsVideo = false;
+                        img.get_blurriness();
+                        Images.Add(img);
+                    }
+                    if (fp.Path.EndsWith(".mp4") || fp.Path.EndsWith(".m4v") || fp.Path.EndsWith(".avi") || fp.Path.EndsWith(".MP4") || fp.Path.EndsWith(".M4V") || fp.Path.EndsWith(".AVI"))
                     {
-                        ImageItem img = new ImageItem();
-                        if (fp.Path.EndsWith(".mp4") || fp.Path.EndsWith(".m4v") || fp.Path.EndsWith(".avi") || fp.Path.EndsWith(".MP4") || fp.Path.EndsWith(".M4V") || fp.Path.EndsWith(".AVI"))
-                        {
-                            img.path = fp;
-                            img.thmb = new BitmapImage();
-                            VideoProperties videoProperties = await fp.Properties.GetVideoPropertiesAsync();
-                            img.Duration = videoProperties.Duration;
-                            img.thmb.SetSource(await fp.GetThumbnailAsync(ThumbnailMode.VideosView));
-                            //img.get_blurriness();
-                            Images.Add(img);
-                        }
+                        img.path = fp;
+                        img.thmb = new BitmapImage();
+                        VideoProperties videoProperties = await fp.Properties.GetVideoPropertiesAsync();
+                        img.Duration = videoProperties.Duration;
+                        img.thmb.SetSource(await fp.GetThumbnailAsync(ThumbnailMode.VideosView));
+                        img.IsVideo = true;
+                        //img.get_blurriness();
+                        Images.Add(img);
                     }
                     n++;
                     PGBar.Value = 100*n / cnt;
@@ -114,6 +109,55 @@ namespace ImageSorter
                 img.sortstate = 2;
             }
             Images.Sort();
+        }
+
+        private void GridView_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            int i = GView.SelectedIndex;
+            if(i > 0)
+            {
+                Debug.WriteLine(Images[i].path.Name);
+            }
+        }
+
+        private void GView_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Delete.IsEnabled = true;
+            int i = GView.SelectedIndex;
+            if (i > 0)
+            {
+                Debug.WriteLine(Images[i].path.Name);
+            }
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            int i = GView.SelectedIndex;
+            if (i >= 0)
+            {
+                Debug.WriteLine(Images[i].path.Name);
+                File.Delete(Images[i].path.Name);
+                Images.RemoveAt(i);
+            }
+        }
+
+        private void DurButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (ImageItem img in Images)
+            {
+                img.sortstate = 3;
+            }
+            Images.Sort();
+        }
+
+        private void GView_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+
+        }
+
+        private void View_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 

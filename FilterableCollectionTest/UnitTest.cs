@@ -22,6 +22,10 @@ namespace FilterableCollectionTest
                 if (i >= 50) Assert.Fail();
             }
             Assert.AreEqual(test.Count,50);
+            test.Restore();
+            Assert.AreEqual(test.Count,100);
+            test.Restore();
+            Assert.AreEqual(test.Count,100);
         }
     }
 }
