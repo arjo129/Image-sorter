@@ -23,6 +23,7 @@ using Windows.Graphics.Imaging;
 
 namespace ImageSorter
 {
+    
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -152,7 +153,12 @@ namespace ImageSorter
 
         private void GView_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-
+            int i = GView.SelectedIndex;
+            if (i >= 0)
+            {
+                Debug.WriteLine(Images[i].path.Name);
+                this.Frame.Navigate(typeof(EditView), Images[i]);
+            }
         }
 
         private void View_Click(object sender, RoutedEventArgs e)

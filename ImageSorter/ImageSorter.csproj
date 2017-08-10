@@ -95,6 +95,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EditView.xaml.cs">
+      <DependentUpon>EditView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FilterableCollection.cs" />
     <Compile Include="ImageItem.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -123,6 +126,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="EditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

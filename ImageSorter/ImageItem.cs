@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace ImageSorter
@@ -13,6 +15,7 @@ namespace ImageSorter
     {
         public StorageFile path { get; set; }
         public BitmapImage thmb { get; set; }
+        public BitmapImage fullimg;
         public float blur { get; set; }
         public int exposure { get; set; }
         public int sortstate { get; set; }
@@ -29,6 +32,8 @@ namespace ImageSorter
                     return "";
                 }
             } }
+
+      
         public int CompareTo(object obj)
         {
             var ob = (ImageItem)obj;
