@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Imaging;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -27,7 +28,7 @@ namespace ImageSorter
     public sealed partial class EditView : Page
     {
         private ImageItem item;
-        private BitmapImage bmp;
+        private byte[] bits;
         public EditView()
         {
             this.InitializeComponent();
@@ -39,16 +40,21 @@ namespace ImageSorter
         }
         private async void ImageLoaded(object sender, RoutedEventArgs r)
         {
-            var fp = await item.path.OpenAsync(Windows.Storage.FileAccessMode.Read);
-            BitmapDecoder decoder = await BitmapDecoder.CreateAsync(fp);
-            var pd = await decoder.GetPixelDataAsync();
-            var dat = pd.DetachPixelData();
-            InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream();
-            DataWriter writer = new DataWriter(stream.GetOutputStreamAt(0));
-            writer.WriteBytes(dat);
-            await writer.StoreAsync();
-            await bmp.SetSourceAsync(stream);
-            img.Source = bmp;
+            using (var stream = await item.path.OpenAsync(FileAccessMode.Read))
+            {
+                var bitmapDecoder = await BitmapDecoder.CreateAsync(stream);
+                var pixelProvider = await bitmapDecoder.GetPixelDataAsync();
+                bits = pixelProvider.DetachPixelData();
+                var softwareBitmap = new SoftwareBitmap(
+                  BitmapPixelFormat.Bgra8,
+                  (int)bitmapDecoder.PixelWidth,
+                  (int)bitmapDecoder.PixelHeight,
+                  BitmapAlphaMode.Premultiplied);
+                softwareBitmap.CopyFromBuffer(bits.AsBuffer());
+                var softwareBitmapSource = new SoftwareBitmapSource();
+                await softwareBitmapSource.SetBitmapAsync(softwareBitmap);
+                img.Source = softwareBitmapSource;
+            }
         }
     }
 }
