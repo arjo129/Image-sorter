@@ -18,7 +18,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Windows.Storage.FileProperties;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.Graphics.Imaging;
+using Windows.UI.Core;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace ImageSorter
@@ -33,10 +33,17 @@ namespace ImageSorter
         FilterableCollection<ImageItem> Images;
         public MainPage()
         {
+            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
             Images = new FilterableCollection<ImageItem>();
             this.InitializeComponent();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                   AppViewBackButtonVisibility.Collapsed;
+        }
         private async void BrowseBtn_Click(object sender, RoutedEventArgs e)
         {
             FolderPicker pk = new FolderPicker();
@@ -163,7 +170,7 @@ namespace ImageSorter
 
         private void View_Click(object sender, RoutedEventArgs e)
         {
-
+            GView_DoubleTapped(sender, null);
         }
     }
 

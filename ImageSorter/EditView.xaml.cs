@@ -9,6 +9,7 @@ using Windows.Foundation.Collections;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -37,6 +38,20 @@ namespace ImageSorter
         {
             base.OnNavigatedTo(e);
             item = (ImageItem)e.Parameter;
+            Frame rootFrame = Window.Current.Content as Frame;
+            if (rootFrame.CanGoBack)
+            {
+                // Show UI in title bar if opted-in and in-app backstack is not empty.
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                    AppViewBackButtonVisibility.Visible;
+            }
+            else
+            {
+                // Remove the UI from the title bar if in-app back stack is empty.
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                   AppViewBackButtonVisibility.Collapsed;
+
+            }
         }
         private async void ImageLoaded(object sender, RoutedEventArgs r)
         {
